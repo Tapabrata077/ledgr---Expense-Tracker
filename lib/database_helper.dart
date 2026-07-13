@@ -18,8 +18,12 @@ Future<Database> createDatabase() async{
 Future<void> insertExpense(Database db,ExpenseModel ex) async{
   await db.rawInsert("insert into Expenses(Category,Amount) values(?,?)",[ex.category,ex.amount],);
 }
+//Delete Data
+Future<void> deleteExpense(Database db,int id)async{
+  await db.rawDelete("delete from Expenses where id=?",[id]);
+}
 //display data
 Future<List<ExpenseModel>> getDatabase(Database db) async{
   final List<Map<String,dynamic>> maps=await db.rawQuery("select * from Expenses");
-  return maps.map((map)=> ExpenseModel(map['Category'],map['Amount'])).toList();
+  return maps.map((map)=> ExpenseModel(map['Category'],map['Amount'],id:map["ID"])).toList();
 }

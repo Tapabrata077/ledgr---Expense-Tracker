@@ -104,9 +104,24 @@ class _HomePageState extends State<Homepage1>{
           SizedBox(height: 13,),
           Expanded(
           child: ListView.builder(
-                itemCount: _expense.length,
-                itemBuilder:(context,index){
-                  return Card(
+              itemCount: _expense.length,
+              itemBuilder:(context,index){
+                return Dismissible(
+                  key:Key(_expense[index].id.toString()),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20),
+                    child: Icon(Icons.delete,color:Colors.white)
+                  ),
+                  onDismissed: (direction) async{
+                    await deleteExpense(db!,_expense[index].id!);
+                    setState(() {
+                      _expense.removeAt(index);
+                    });
+                  },
+                  child: Card(
                     margin: EdgeInsets.symmetric(horizontal: 16,vertical: 4),
                     color: Color(0xFF16213E),
                     child: ListTile(
@@ -116,6 +131,7 @@ class _HomePageState extends State<Homepage1>{
                         style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFFFD700),
+                        ),
                       ),
                     ),
                   ),
